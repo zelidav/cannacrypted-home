@@ -13,7 +13,7 @@ which matters, because this list is a map of client infrastructure.
 import base64, hashlib, json, os, secrets, sys
 
 PASSWORD = "Cannacrypted2026!"
-OUT = "index.html"
+OUT = "directory/index.html"
 ITERATIONS = 210000
 
 # What is actually on the domain. Grouped the way somebody looking for one of these
