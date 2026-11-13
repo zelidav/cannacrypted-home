@@ -1,153 +1,535 @@
 <!doctype html>
 <html lang="en">
+<head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cannacrypted</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230B0F14'/%3E%3Cpath d='M10 21V11h6a5 5 0 0 1 0 10z' fill='none' stroke='%2340E0A0' stroke-width='2.4'/%3E%3C/svg%3E">
+<meta name="description" content="Cannacrypted is the software arm of Canis Major Partners. Provenance registries, training apps, field-sales AI, staffing and investor tools, built and run in New York.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#070A0E;--panel:#0E141B;--line:#1B2530;--ink:#E8EEF4;--dim:#7C8B99;
-  --acc:#40E0A0;--acc-d:#1EA97A;--font:Inter,system-ui,-apple-system,sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace}
+:root{
+  --paper:#F2F0EA;
+  --paper-2:#E8E5DC;
+  --ink:#121212;
+  --ink-2:#4A4A47;
+  --rule:#121212;
+  --hair:#C9C5BA;
+  --green:#2AA95B;       /* verified mark, non-text only */
+  --green-ink:#17703A;   /* green text on paper, 5.6:1 */
+  --red:#C00000;         /* one dot, family nod to Sirius */
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --sans:"Archivo", "Helvetica Neue", Arial, sans-serif;
+  --gut:40px;
+}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);
-  font-family:var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden}
-/* a slow field behind everything - the only decoration on the page */
-.field{position:fixed;inset:0;z-index:0;opacity:.5;
-  background:
-    radial-gradient(60rem 40rem at 15% -10%,rgba(64,224,160,.14),transparent 60%),
-    radial-gradient(50rem 40rem at 110% 20%,rgba(40,120,220,.13),transparent 60%),
-    radial-gradient(40rem 30rem at 50% 120%,rgba(64,224,160,.08),transparent 60%)}
-.grid{position:fixed;inset:0;z-index:0;opacity:.35;
-  background-image:linear-gradient(var(--line) 1px,transparent 1px),
-                   linear-gradient(90deg,var(--line) 1px,transparent 1px);
-  background-size:64px 64px;
-  -webkit-mask-image:radial-gradient(70% 60% at 50% 40%,#000,transparent);
-  mask-image:radial-gradient(70% 60% at 50% 40%,#000,transparent)}
-main{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;
-  justify-content:center;padding:40px 22px}
-.card{width:100%;max-width:430px}
-.mark{font-size:13px;letter-spacing:.42em;text-transform:uppercase;color:var(--acc);
-  font-family:var(--mono);margin-bottom:14px}
-h1{margin:0;font-size:clamp(38px,9vw,58px);font-weight:700;letter-spacing:-.035em;
-  line-height:1}
-h1 span{color:var(--acc)}
-.sub{color:var(--dim);margin:14px 0 32px;font-size:15.5px;line-height:1.6}
-form{display:grid;gap:11px}
-label{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
-  font-family:var(--mono)}
-input{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:11px;
-  padding:14px 15px;color:var(--ink);font:inherit;font-size:15.5px;outline:none;
-  transition:border-color .15s,box-shadow .15s}
-input:focus{border-color:var(--acc-d);box-shadow:0 0 0 3px rgba(64,224,160,.13)}
-button{margin-top:6px;background:var(--acc);color:#04120C;border:0;border-radius:11px;
-  padding:15px;font:inherit;font-weight:700;font-size:15.5px;cursor:pointer;
-  transition:filter .15s}
-button:hover{filter:brightness(1.08)}
-button:disabled{opacity:.55;cursor:default}
-.err{color:#FF8080;font-size:14px;min-height:20px;margin-top:4px}
-.foot{margin-top:30px;color:#4E5C69;font-size:12.5px;font-family:var(--mono);
-  letter-spacing:.06em}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.5;font-variation-settings:"wdth" 100;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.wrap{max-width:1440px;margin:0 auto;padding:0 var(--gut)}
+.mono{font-family:var(--mono);font-size:13px;letter-spacing:.02em;text-transform:uppercase}
+.mono-l{font-family:var(--mono);font-size:14px}
+.rule{border-top:2px solid var(--rule)}
+.hair{border-top:1px solid var(--hair)}
 
-/* ---- the directory ---- */
-.dir{display:none;position:relative;z-index:1;max-width:1000px;margin:0 auto;
-  padding:56px 22px 90px}
-.dir.on{display:block}
-.dirhead{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;
-  border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:34px}
-.dirhead h2{margin:0;font-size:30px;font-weight:700;letter-spacing:-.02em}
-.dirhead .who{margin-left:auto;color:var(--dim);font-size:13px;font-family:var(--mono)}
-.grp{margin-bottom:34px}
-.grp h3{margin:0 0 14px;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--acc);font-family:var(--mono)}
-.rows{display:grid;gap:8px}
-a.row{display:flex;gap:16px;align-items:baseline;text-decoration:none;color:inherit;
-  background:var(--panel);border:1px solid var(--line);border-radius:11px;
-  padding:13px 16px;transition:border-color .15s,transform .15s}
-a.row:hover{border-color:var(--acc-d);transform:translateX(3px)}
-a.row b{font-family:var(--mono);font-weight:500;font-size:14.5px;color:var(--acc);
-  white-space:nowrap}
-a.row span{color:var(--dim);font-size:14.5px}
-a.row i{margin-left:auto;color:#3A4753;font-style:normal;font-size:13px}
-@media(max-width:620px){a.row{flex-direction:column;gap:5px}a.row i{display:none}}
+/* ---------- header ---------- */
+header.top{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:2px solid var(--rule)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:24px}
+.mark{display:flex;align-items:center;gap:12px;text-decoration:none}
+.mark svg{width:28px;height:28px;flex:none}
+.word{font-size:24px;font-weight:700;letter-spacing:-.02em;font-variation-settings:"wdth" 88;line-height:1}
+.word b{font-weight:400}
+.word i{font-style:normal;color:var(--red)}
+nav.main{display:flex;gap:28px;align-items:center}
+nav.main a{text-decoration:none;font-family:var(--mono);font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+nav.main a.btn{font-family:var(--sans);text-transform:none;letter-spacing:0;font-size:15px}
+nav.main a:hover{text-decoration:underline;text-underline-offset:4px}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--paper);text-decoration:none;font-weight:600;font-size:16px;padding:13px 20px;border:2px solid var(--ink)}
+.btn:hover{background:var(--paper);color:var(--ink)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:var(--paper)}
+.btn.sm{padding:9px 14px;font-size:15px}
+
+/* ---------- hero ---------- */
+.hero{padding-top:28px}
+.hero-meta{display:flex;justify-content:space-between;color:var(--ink-2);padding-bottom:14px}
+.hero-grid{display:grid;grid-template-columns:repeat(12,1fr);column-gap:24px;border-top:2px solid var(--rule);padding-top:44px}
+.hero-copy{grid-column:1 / span 6;display:flex;flex-direction:column}
+h1{font-size:clamp(46px,6.4vw,96px);line-height:.92;letter-spacing:-.022em;font-weight:800;font-variation-settings:"wdth" 74;margin:0 0 28px}
+h1 .sc{display:block}
+h1 .scr{font-family:var(--mono);font-weight:500;font-size:.36em;letter-spacing:0;color:var(--green-ink);display:block;margin-top:.5em;min-height:1em;line-height:1.1}
+.lede{font-size:20px;line-height:1.45;max-width:31em;margin:0 0 30px}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap}
+.hero-figs{grid-column:7 / span 6;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:end}
+.fig{margin:0}
+.fig .ph{border:2px solid var(--ink);border-radius:18px;overflow:hidden;background:#fff;aspect-ratio:600/1298}
+.fig .ph img{width:100%;height:100%;object-fit:cover;object-position:top}
+.fig figcaption{margin-top:10px;display:grid;grid-template-columns:auto 1fr;column-gap:10px;font-size:14px;line-height:1.35}
+.fig figcaption .n{font-family:var(--mono);font-size:13px;color:var(--ink-2)}
+.fig.lift{transform:translateY(-22px)}
+
+/* ledger strip */
+.strip{margin-top:40px;display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--rule);border-bottom:2px solid var(--rule)}
+.strip > div{padding:18px 20px 16px;border-left:1px solid var(--hair)}
+.strip > div:first-child{border-left:0;padding-left:0}
+.strip .v{font-size:44px;font-weight:700;letter-spacing:-.03em;font-variation-settings:"wdth" 80;line-height:1}
+.strip .l{margin-top:6px;font-size:15px;color:var(--ink-2)}
+
+/* ---------- section head ---------- */
+section{padding:96px 0 0}
+.sh{display:grid;grid-template-columns:repeat(12,1fr);column-gap:24px;border-top:2px solid var(--rule);padding-top:14px;margin-bottom:44px}
+.sh .no{grid-column:1 / span 2;font-family:var(--mono);font-size:13px;text-transform:uppercase}
+.sh h2{grid-column:3 / span 7;margin:0;font-size:clamp(34px,4vw,56px);line-height:1;letter-spacing:-.03em;font-weight:750;font-variation-settings:"wdth" 78}
+.sh .aside{grid-column:10 / span 3;font-size:16px;color:var(--ink-2);align-self:end}
+
+/* ---------- the name ---------- */
+.name-grid{display:grid;grid-template-columns:repeat(12,1fr);column-gap:24px;row-gap:32px}
+.entry{grid-column:span 4;border-top:1px solid var(--hair);padding-top:16px}
+.entry .t{font-size:44px;font-weight:700;letter-spacing:-.03em;font-variation-settings:"wdth" 80;line-height:1}
+.entry .t.m{font-family:var(--mono);font-weight:500;font-size:38px;letter-spacing:-.03em}
+.entry .pos{font-family:var(--mono);font-size:13px;color:var(--ink-2);margin:8px 0 14px;text-transform:uppercase}
+.entry p{margin:0;max-width:24em}
+.verify{grid-column:span 4;background:var(--ink);color:var(--paper);padding:22px 22px 24px;display:flex;flex-direction:column;justify-content:space-between;gap:20px}
+.verify .row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;gap:12px;border-bottom:1px solid #3a3a38;padding:7px 0}
+.verify .row span:last-child{text-align:right}
+.verify .ok{display:flex;align-items:center;gap:10px;font-weight:600}
+.verify .ok::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--green)}
+
+/* ---------- records ---------- */
+.rec{display:grid;grid-template-columns:repeat(12,1fr);column-gap:24px}
+.rec-side{grid-column:1 / span 4}
+.rec-id{font-family:var(--mono);font-size:13px;display:flex;gap:16px;color:var(--ink-2);margin-bottom:12px;text-transform:uppercase}
+.rec-side h3{font-size:38px;line-height:1;letter-spacing:-.03em;font-weight:750;font-variation-settings:"wdth" 80;margin:0 0 16px}
+.rec-side p{margin:0 0 20px}
+.spec{width:100%;border-collapse:collapse;margin:8px 0 24px;font-size:16px}
+.spec td{border-top:1px solid var(--hair);padding:9px 0;vertical-align:top}
+.spec td:first-child{font-family:var(--mono);font-size:13px;text-transform:uppercase;color:var(--ink-2);width:38%;padding-top:11px}
+.big-n{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;border-top:2px solid var(--rule);padding-top:14px}
+.big-n .v{font-size:36px;font-weight:700;letter-spacing:-.03em;font-variation-settings:"wdth" 80;line-height:1}
+.big-n .l{font-size:14px;color:var(--ink-2);margin-top:4px;line-height:1.3}
+.rec-figs{grid-column:5 / span 8;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;align-items:start}
+.rec-figs .fig:nth-child(even){margin-top:48px}
+.desk{grid-column:5 / span 8;margin-top:28px}
+.desk .frame{border:2px solid var(--ink);background:#fff}
+.desk .bar{display:flex;gap:6px;padding:8px 12px;border-bottom:2px solid var(--ink);align-items:center}
+.desk .bar i{width:9px;height:9px;border:1.5px solid var(--ink);border-radius:50%}
+.desk .bar span{margin-left:10px;font-family:var(--mono);font-size:12px}
+.rec + .rec{margin-top:96px;padding-top:24px;border-top:1px solid var(--hair)}
+blockquote{margin:0 0 24px;padding:18px 0 0;border-top:2px solid var(--rule);font-size:24px;line-height:1.3;letter-spacing:-.01em;font-weight:500}
+blockquote footer{font-size:14px;font-family:var(--mono);color:var(--ink-2);margin-top:10px;text-transform:uppercase}
+.rec.mix .rec-figs{grid-template-columns:repeat(3,1fr)}
+
+/* ---------- registry table ---------- */
+.reg{width:100%;border-collapse:collapse}
+.reg th{font-family:var(--mono);font-size:12px;font-weight:500;text-transform:uppercase;text-align:left;color:var(--ink-2);padding:0 12px 10px 0;border-bottom:2px solid var(--rule)}
+.reg td{padding:14px 12px 14px 0;border-bottom:1px solid var(--hair);vertical-align:top}
+.reg td.id{font-family:var(--mono);font-size:14px;width:80px}
+.reg td.nm{font-weight:650;width:22%;font-size:18px;letter-spacing:-.01em}
+.reg td.ds{color:var(--ink)}
+.reg td.sec{font-family:var(--mono);font-size:13px;width:130px;text-transform:uppercase}
+.reg td.st{width:150px;font-size:15px}
+.reg td.st span{display:inline-flex;align-items:center;gap:8px}
+.reg td.st span::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--green)}
+.reg td.st span.r::before{background:transparent;border:1.5px solid var(--ink)}
+.reg td.hx{font-family:var(--mono);font-size:13px;width:130px;color:var(--ink-2);white-space:nowrap}
+.reg tr.grp td{padding-top:30px;border-bottom:2px solid var(--rule);font-family:var(--mono);font-size:13px;text-transform:uppercase;font-weight:500}
+.reg-note{display:flex;justify-content:space-between;gap:24px;margin-top:16px;color:var(--ink-2);font-size:15px}
+
+/* ---------- platform ---------- */
+.plat{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--rule)}
+.plat > div{padding:20px 24px 28px 0;border-right:1px solid var(--hair);margin-right:24px}
+.plat > div:last-child{border-right:0;margin-right:0}
+.plat .k{font-family:var(--mono);font-size:13px;text-transform:uppercase;color:var(--ink-2)}
+.plat h4{font-size:24px;line-height:1.1;letter-spacing:-.02em;font-weight:700;font-variation-settings:"wdth" 84;margin:12px 0 10px}
+.plat p{margin:0;font-size:16px}
+.fee{margin-top:40px;display:grid;grid-template-columns:repeat(12,1fr);column-gap:24px;background:var(--ink);color:var(--paper);padding:36px 40px}
+.fee .q{grid-column:1 / span 7;font-size:clamp(28px,3vw,42px);line-height:1.08;letter-spacing:-.03em;font-weight:700;font-variation-settings:"wdth" 80}
+.fee ul{grid-column:9 / span 4;list-style:none;margin:0;padding:0}
+.fee li{border-top:1px solid #3a3a38;padding:10px 0;font-size:16px;display:flex;gap:14px}
+.fee li span{font-family:var(--mono);font-size:13px;color:#B9B5AA;min-width:28px;padding-top:2px}
+
+/* ---------- field ---------- */
+.field{display:grid;grid-template-columns:repeat(12,1fr);column-gap:24px;align-items:start}
+.field .photo{grid-column:1 / span 6;border:2px solid var(--ink)}
+.field .photo img{width:100%;height:auto;aspect-ratio:16/10;object-fit:cover}
+.field .photo figcaption{border-top:2px solid var(--ink);padding:8px 12px;font-family:var(--mono);font-size:13px;background:var(--paper)}
+.field .txt{grid-column:8 / span 5}
+.field h3{font-size:34px;line-height:1.02;letter-spacing:-.03em;font-weight:750;font-variation-settings:"wdth" 80;margin:0 0 16px}
+.report{border:2px solid var(--ink);margin-top:24px;background:#fff}
+.report .hd{display:flex;justify-content:space-between;padding:10px 14px;border-bottom:2px solid var(--ink);font-family:var(--mono);font-size:13px;text-transform:uppercase}
+.report .bd{display:grid;grid-template-columns:repeat(3,1fr)}
+.report .bd > div{padding:16px 14px;border-right:1px solid var(--hair)}
+.report .bd > div:last-child{border-right:0}
+.report .v{font-size:40px;font-weight:700;letter-spacing:-.03em;font-variation-settings:"wdth" 78;line-height:1}
+.report .l{font-size:14px;color:var(--ink-2);margin-top:4px}
+.bar61{height:10px;margin:0 14px 16px;background:var(--paper-2);position:relative}
+.bar61::after{content:"";position:absolute;inset:0 39% 0 0;background:var(--green)}
+
+/* ---------- contact ---------- */
+.close{margin-top:96px;background:var(--ink);color:var(--paper);padding:88px 0 40px}
+.close .g{display:grid;grid-template-columns:repeat(12,1fr);column-gap:24px}
+.close h2{grid-column:1 / span 8;font-size:clamp(44px,6vw,92px);line-height:.94;letter-spacing:-.035em;font-weight:800;font-variation-settings:"wdth" 72;margin:0}
+.close .side{grid-column:9 / span 4;align-self:end}
+.close .side p{margin:0 0 22px;font-size:18px;color:#DAD6CC}
+.close .btn{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.close .btn:hover{background:transparent;color:var(--paper)}
+.close .mail{display:block;margin-top:16px;font-family:var(--mono);font-size:15px;color:var(--paper)}
+.foot{margin-top:88px;border-top:1px solid #3a3a38;padding-top:18px;display:flex;justify-content:space-between;align-items:center;gap:20px;font-family:var(--mono);font-size:13px;color:#B9B5AA}
+.foot .fam{display:flex;align-items:center;gap:12px}
+.foot .fam img{height:30px;width:auto;filter:invert(1) brightness(1.6)}
+.foot a{color:#DAD6CC}
+
+/* ---------- load moment: the word decrypts ---------- */
+@media (prefers-reduced-motion:no-preference){
+  .hero-figs .fig{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+  .hero-figs .fig:nth-child(2){animation-delay:.08s}
+  .hero-figs .fig:nth-child(3){animation-delay:.16s}
+  @keyframes rise{from{opacity:0;translate:0 24px}to{opacity:1;translate:0 0}}
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:1100px){
+  nav.main a.opt{display:none}
+  .hero-copy{grid-column:1 / span 12}
+  .hero-figs{grid-column:1 / span 12;margin-top:48px;max-width:720px}
+  .fig.lift{transform:none}
+  .sh h2{grid-column:3 / span 10}
+  .sh .aside{grid-column:3 / span 10;margin-top:12px}
+  .entry,.verify{grid-column:span 6}
+  .rec-side,.rec-figs,.desk{grid-column:1 / span 12}
+  .rec-figs{margin-top:36px}
+  .plat{grid-template-columns:repeat(2,1fr)}
+  .plat > div:nth-child(2){border-right:0;margin-right:0}
+  .field .photo,.field .txt{grid-column:1 / span 12}
+  .field .txt{margin-top:28px}
+  .fee .q,.fee ul{grid-column:1 / span 12}
+  .fee ul{margin-top:24px}
+  .close h2,.close .side{grid-column:1 / span 12}
+  .close .side{margin-top:32px}
+  .reg td.hx,.reg th.hx{display:none}
+}
+@media (max-width:640px){
+  :root{--gut:16px}
+  body{font-size:16px}
+  nav.main a{display:none}
+  .word{font-size:21px}
+  .hero{padding-top:16px}
+  .hero-meta span:last-child{display:none}
+  .hero-grid{padding-top:24px}
+  h1{font-size:50px}
+  .lede{font-size:18px}
+  .hero-figs{gap:10px;margin-top:36px}
+  .fig figcaption{font-size:13px;grid-template-columns:1fr}
+  .strip{grid-template-columns:repeat(2,1fr)}
+  .strip > div{padding:14px 0 12px 14px}
+  .strip > div:nth-child(odd){border-left:0;padding-left:0}
+  .strip > div:nth-child(n+3){border-top:1px solid var(--hair)}
+  .strip .v{font-size:34px}
+  section{padding-top:72px}
+  .sh{display:block}
+  .sh .no{margin-bottom:10px}
+  .entry,.verify{grid-column:1 / span 12}
+  .rec-figs{grid-template-columns:repeat(2,1fr);gap:14px}
+  .rec.mix .rec-figs{grid-template-columns:repeat(3,1fr);gap:10px}
+  .rec.mix .rec-figs .fig:nth-child(even){margin-top:24px}
+  .rec-side h3{font-size:32px}
+  .big-n .v{font-size:28px}
+  .plat{grid-template-columns:1fr}
+  .plat > div{border-right:0;margin-right:0;border-bottom:1px solid var(--hair)}
+  .fee{padding:28px 20px}
+  .report .v{font-size:30px}
+  /* registry becomes cards */
+  .reg thead{display:none}
+  .reg,.reg tbody,.reg tr,.reg td{display:block;width:auto !important}
+  .reg tr{border-bottom:1px solid var(--hair);padding:14px 0;display:grid;grid-template-columns:auto 1fr;column-gap:12px}
+  .reg td{border:0;padding:0}
+  .reg td.id{grid-row:1}
+  .reg td.nm{grid-column:2}
+  .reg td.ds{grid-column:1 / span 2;margin-top:6px}
+  .reg td.sec{grid-column:1 / span 2;margin-top:8px}
+  .reg td.st{grid-column:1 / span 2;margin-top:4px}
+  .reg tr.grp{display:block;border-bottom:2px solid var(--rule);padding:28px 0 8px}
+  .reg-note{flex-direction:column}
+  .close{padding-top:64px}
+  .close h2{font-size:48px}
+  .foot{flex-direction:column;align-items:flex-start}
+}
 </style>
+</head>
+<body>
 
-<div class="field"></div><div class="grid"></div>
-
-<main id="gate">
-  <div class="card">
-    <div class="mark">Cannacrypted</div>
-    <h1>Canna<span>crypted</span></h1>
-    <p class="sub">Everything we run, behind one door.</p>
-    <form id="f" autocomplete="on">
-      <div>
-        <label for="e">Email</label>
-        <input id="e" type="email" required autocomplete="username" placeholder="you@company.com">
-      </div>
-      <div>
-        <label for="p">Password</label>
-        <input id="p" type="password" required autocomplete="current-password" placeholder="••••••••••">
-      </div>
-      <button id="go" type="submit">Enter</button>
-      <div class="err" id="err"></div>
-    </form>
-    <div class="foot">Encrypted at rest. Nothing loads until it opens.</div>
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="#top" aria-label="Cannacrypted home">
+      <svg viewBox="0 0 28 28" aria-hidden="true">
+        <rect x="1.5" y="1.5" width="25" height="25" fill="none" stroke="#121212" stroke-width="3"/>
+        <rect x="8" y="8" width="12" height="12" fill="#121212"/>
+        <circle cx="24" cy="24" r="3.4" fill="#C00000"/>
+      </svg>
+      <span class="word"><b>canna</b>crypted<i>.</i></span>
+    </a>
+    <nav class="main" aria-label="Main">
+      <a href="#name" class="opt">The name</a>
+      <a href="#work" class="opt">Work</a>
+      <a href="#registry">Registry</a>
+      <a href="#platform" class="opt">How it runs</a>
+      <a href="/directory/" class="opt">Client login</a>
+      <a class="btn sm" href="mailto:david@canismajorpartners.com?subject=Cannacrypted%20demo">Request a demo</a>
+    </nav>
   </div>
-</main>
+</header>
 
-<section class="dir" id="dir">
-  <div class="dirhead">
-    <h2>Directory</h2>
-    <div class="who" id="who"></div>
+<main id="top">
+<div class="wrap hero">
+  <div class="hero-meta mono"><span>Cannacrypted / Index 2026</span><span>New York / The software arm of Canis Major Partners</span></div>
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <h1><span class="sc">We build the apps.</span><span class="sc">Then we run them.</span><span class="scr" id="scr" aria-hidden="true">verified, signed, logged.</span></h1>
+      <p class="lede">Provenance registries, budtender training, field-sales AI, staffing, investor tracking. Fifteen pieces of software in daily use for brands in New York and beyond. Some cannabis, some not. All of it on our servers, with our name on the pager.</p>
+      <div class="cta-row">
+        <a class="btn" href="mailto:david@canismajorpartners.com?subject=Cannacrypted%20demo">Request a demo <span aria-hidden="true">&rarr;</span></a>
+        <a class="btn ghost" href="#registry">See the registry</a>
+      </div>
+    </div>
+    <div class="hero-figs" aria-label="Screens from apps in use">
+      <figure class="fig">
+        <div class="ph"><img src="img/app-jb-qr.webp" alt="Jerome Baker staff portal: Made by hand, tracked for life" width="600" height="1298"></div>
+        <figcaption><span class="n">Fig. 01</span><span>Provenance registry, Jerome Baker</span></figcaption>
+      </figure>
+      <figure class="fig lift">
+        <div class="ph"><img src="img/app-jb-budtender.webp" alt="JBD budtender program sign-in" width="600" height="1298"></div>
+        <figcaption><span class="n">Fig. 02</span><span>Budtender program, 126 live</span></figcaption>
+      </figure>
+      <figure class="fig">
+        <div class="ph"><img src="img/app-mix-hub.webp" alt="Made in Xiaolin studio page in the High Council app" width="600" height="1298"></div>
+        <figcaption><span class="n">Fig. 03</span><span>The High Council, Made in Xiaolin</span></figcaption>
+      </figure>
+    </div>
   </div>
-  <div id="body"></div>
+  <div class="strip" role="list">
+    <div role="listitem"><div class="v">126</div><div class="l">budtenders live on the JB app</div></div>
+    <div role="listitem"><div class="v">30,000</div><div class="l">points redeemed for merch</div></div>
+    <div role="listitem"><div class="v">14</div><div class="l">store portals with live inventory</div></div>
+    <div role="listitem"><div class="v">76</div><div class="l">users in 7 stores, first weeks of MiX</div></div>
+  </div>
+</div>
+
+<!-- 01 the name -->
+<section id="name">
+  <div class="wrap">
+    <div class="sh"><div class="no">01 / The name</div><h2>Half plant, half cipher.</h2><div class="aside">The name is the brief. Everything we ship is about proving something is what it says it is.</div></div>
+    <div class="name-grid">
+      <div class="entry">
+        <div class="t">canna</div>
+        <div class="pos">prefix / the industry we grew up in</div>
+        <p>Licensed stores, budtenders, wholesale, one-of-one glass. A market where trust is scarce and the paperwork is real.</p>
+      </div>
+      <div class="entry">
+        <div class="t m">crypted</div>
+        <div class="pos">suffix / what we do about it</div>
+        <p>Every piece gets a record. Every record gets a QR. Anyone with a phone can check it, and nobody can quietly change it.</p>
+      </div>
+      <div class="verify" aria-label="Example verification record">
+        <div>
+          <div class="row"><span>Record</span><span>JB one-of-one</span></div>
+          <div class="row"><span>Maker</span><span>Jerome Baker, est. 1991</span></div>
+          <div class="row"><span>Location</span><span>Licensed NY door</span></div>
+          <div class="row"><span>Scan</span><span>QR on the piece</span></div>
+        </div>
+        <div class="ok">Verified. Tracked for life.</div>
+      </div>
+    </div>
+  </div>
 </section>
 
+<!-- 02 work -->
+<section id="work">
+  <div class="wrap">
+    <div class="sh"><div class="no">02 / Selected records</div><h2>Two systems, in stores right now.</h2><div class="aside">Screens below are the production apps, not mockups. Staff use them every shift.</div></div>
+
+    <article class="rec">
+      <div class="rec-side">
+        <div class="rec-id"><span>CC-01</span><span>Cannabis</span><span>Live since 2025</span></div>
+        <h3>Jerome Baker app suite</h3>
+        <p>Heritage glass since 1991. Raided in 2003, back on the shelf. In New York the brand sits in 24 doors, so we built the software those doors run on.</p>
+        <table class="spec">
+          <tr><td>Provenance</td><td>A registry entry and a QR on every one-of-one piece</td></tr>
+          <tr><td>Stores</td><td>Portals with inventory, sell-through and invoices</td></tr>
+          <tr><td>Budtenders</td><td>Training, quizzes, points for a module or a logged sale, redeemed for co-branded merch</td></tr>
+          <tr><td>Sales</td><td>Live menus, wholesale signup with a revenue projector, raffles, EAN-13 barcodes</td></tr>
+        </table>
+        <div class="big-n">
+          <div><div class="v">24</div><div class="l">NY doors, top tier</div></div>
+          <div><div class="v">64</div><div class="l">jurisdictions shipped</div></div>
+          <div><div class="v">62%</div><div class="l">revenue from repeat buyers</div></div>
+        </div>
+      </div>
+      <div class="rec-figs">
+        <figure class="fig"><div class="ph"><img src="img/app-jb-home.webp" alt="JB Fam invite list signup" width="600" height="1298"></div><figcaption><span class="n">1.1</span><span>Invite list</span></figcaption></figure>
+        <figure class="fig"><div class="ph"><img src="img/app-jb-menu.webp" alt="Jerome Baker live menu" width="600" height="1298"></div><figcaption><span class="n">1.2</span><span>Live menu</span></figcaption></figure>
+        <figure class="fig"><div class="ph"><img src="img/app-jb-signup.webp" alt="Wholesale signup with revenue projector" width="600" height="1298"></div><figcaption><span class="n">1.3</span><span>Wholesale signup</span></figcaption></figure>
+        <figure class="fig"><div class="ph"><img src="img/app-jb-qr.webp" alt="Staff portal" width="600" height="1298"></div><figcaption><span class="n">1.4</span><span>Staff portal</span></figcaption></figure>
+      </div>
+      <figure class="desk fig">
+        <div class="frame">
+          <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>jeromebakerny.com</span></div>
+          <img src="img/jb-site.webp" alt="Jerome Baker New York website" width="1440" height="900">
+        </div>
+        <figcaption><span class="n">1.5</span><span>The consumer site, wired to the same catalog</span></figcaption>
+      </figure>
+    </article>
+
+    <article class="rec mix">
+      <div class="rec-side">
+        <div class="rec-id"><span>CC-02</span><span>Cannabis</span><span>Live 2026</span></div>
+        <h3>The High Council</h3>
+        <p>Budtender training and rewards for Made in Xiaolin, plus a merch store with card checkout. Same bones as the JB suite, a different brand on top.</p>
+        <blockquote>&ldquo;I really appreciate everything you've built. I think the platform is solid.&rdquo;<footer>Made in Xiaolin</footer></blockquote>
+        <div class="big-n">
+          <div><div class="v">76</div><div class="l">users</div></div>
+          <div><div class="v">7</div><div class="l">stores</div></div>
+          <div><div class="v">Weeks</div><div class="l">not months, to launch</div></div>
+        </div>
+      </div>
+      <div class="rec-figs">
+        <figure class="fig"><div class="ph"><img src="img/app-mix-thc.webp" alt="Welcome to the High Council entry screen" width="600" height="1298"></div><figcaption><span class="n">2.1</span><span>Entry</span></figcaption></figure>
+        <figure class="fig"><div class="ph"><img src="img/app-mix-hub.webp" alt="Made in Xiaolin studio page" width="600" height="1298"></div><figcaption><span class="n">2.2</span><span>The studio</span></figcaption></figure>
+        <figure class="fig"><div class="ph"><img src="img/app-mix-cloud.webp" alt="Xiaolin Cloud Ritual page" width="600" height="1298"></div><figcaption><span class="n">2.3</span><span>Cloud Ritual</span></figcaption></figure>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- 03 registry -->
+<section id="registry">
+  <div class="wrap">
+    <div class="sh"><div class="no">03 / The registry</div><h2>Everything we've shipped and still run.</h2><div class="aside">Fifteen entries. Plain words for what each one does.</div></div>
+    <table class="reg" id="reg">
+      <thead><tr><th>No.</th><th>Name</th><th>What it does</th><th>Sector</th><th>Status</th><th class="hx">SHA-256</th></tr></thead>
+      <tbody>
+        <tr class="grp"><td colspan="6">Cannabis</td></tr>
+        <tr><td class="id">CC-01</td><td class="nm">Jerome Baker app suite</td><td class="ds">Provenance registry and QR check on every one-of-one piece, store portals, budtender training and rewards, live menus, wholesale signup, raffles, barcodes.</td><td class="sec">Cannabis</td><td class="st"><span>In use</span></td><td class="hx"></td></tr>
+        <tr><td class="id">CC-02</td><td class="nm">The High Council</td><td class="ds">Budtender training and rewards for Made in Xiaolin, plus a merch store with card checkout.</td><td class="sec">Cannabis</td><td class="st"><span>In use</span></td><td class="hx"></td></tr>
+        <tr><td class="id">CC-03</td><td class="nm">Beeline</td><td class="ds">Field sales map and an AI assistant for reps, with a profile per rep. Licensable to other brands.</td><td class="sec">Cannabis</td><td class="st"><span>In use</span></td><td class="hx"></td></tr>
+        <tr><td class="id">CC-04</td><td class="nm">JB expert bot</td><td class="ds">In-app assistant that answers from the real product catalog. Staff can also plug Claude into the suite with read-only tools and their own login.</td><td class="sec">Cannabis</td><td class="st"><span>In use</span></td><td class="hx"></td></tr>
+        <tr><td class="id">CC-05</td><td class="nm">FLWR GRLS</td><td class="ds">Brand-ambassador staffing. Booking, approval, and shift offers sent to people near the store.</td><td class="sec">Cannabis</td><td class="st"><span>Built</span></td><td class="hx"></td></tr>
+        <tr><td class="id">CC-06</td><td class="nm">SYPP ops agent</td><td class="ds">Event staffing and field reports, rolled into a branded monthly report for the brand.</td><td class="sec">Cannabis</td><td class="st"><span>In use</span></td><td class="hx"></td></tr>
+        <tr><td class="id">CC-07</td><td class="nm">Investor tracker</td><td class="ds">Investor CRM with approvals, tracked outreach (opens, clicks, doc reads) and a data room.</td><td class="sec">Cannabis</td><td class="st"><span>Shipped this week</span></td><td class="hx"></td></tr>
+        <tr><td class="id">CC-08</td><td class="nm">Collab and event pages</td><td class="ds">Retail landing and lead pages for collabs (Hall of Flowers, Kaleidoscope) and an event photobooth with built-in captions.</td><td class="sec">Cannabis</td><td class="st"><span>In use</span></td><td class="hx"></td></tr>
+        <tr><td class="id">CC-09</td><td class="nm">Cannacrypted console</td><td class="ds">One admin panel for cost and usage across every client app and cloud.</td><td class="sec">All</td><td class="st"><span>In use</span></td><td class="hx"></td></tr>
+        <tr class="grp"><td colspan="6">Not cannabis</td></tr>
+        <tr><td class="id">CC-10</td><td class="nm">Periwink</td><td class="ds">Perimenopause community. Landing page, admin dashboard and an installable app.</td><td class="sec">Health</td><td class="st"><span>Built</span></td><td class="hx"></td></tr>
+        <tr><td class="id">CC-11</td><td class="nm">Grandma Recipes</td><td class="ds">Family recipe app. Snap a handwritten card, AI reads the handwriting, add a voice note, share it.</td><td class="sec">Family</td><td class="st"><span>In use</span></td><td class="hx"></td></tr>
+        <tr><td class="id">CC-12</td><td class="nm">Kaleidoscope</td><td class="ds">Promo-media engine. A story script goes in, finished stills and video come out.</td><td class="sec">Media</td><td class="st"><span>Built</span></td><td class="hx"></td></tr>
+        <tr><td class="id">CC-13</td><td class="nm">Credential vault</td><td class="ds">A local capture window that drops passwords straight into a cloud secret manager. No password ever passes through a chat or a file.</td><td class="sec">Security</td><td class="st"><span>In use</span></td><td class="hx"></td></tr>
+        <tr><td class="id">CC-14</td><td class="nm">Dii Sumus</td><td class="ds">Research harness for an economy of AI agents, with an encrypted public observatory.</td><td class="sec">Research</td><td class="st"><span class="r">Research</span></td><td class="hx"></td></tr>
+        <tr><td class="id">CC-15</td><td class="nm">Brand sites</td><td class="ds">Monarch Motion, an athletic streetwear waitlist. Clean Balls Only, lacrosse apparel.</td><td class="sec">Apparel</td><td class="st"><span>Shipped</span></td><td class="hx"></td></tr>
+      </tbody>
+    </table>
+    <div class="reg-note"><span>The SHA-256 column is computed in your browser from each row's text when the page loads. Change one word and the hash changes. That's the whole idea.</span><span class="mono">15 records</span></div>
+  </div>
+</section>
+
+<!-- 04 field -->
+<section id="field">
+  <div class="wrap">
+    <div class="sh"><div class="no">04 / Field data</div><h2>Software that reports from the floor.</h2><div class="aside">SYPP Cloud Bar is our own brand. The ops agent turns every event into numbers the brand can read.</div></div>
+    <div class="field">
+      <figure class="photo fig" style="margin:0">
+        <img src="img/sypp-bar.webp" alt="SYPP Cloud Bar pouring a flavored cloud into a glass" width="1280" height="720">
+        <figcaption>4.1 / SYPP Cloud Bar, a flavored cloud poured on top of a drink</figcaption>
+      </figure>
+      <div class="txt">
+        <h3>Every pour, counted. Every month, reported.</h3>
+        <p>Staff log who they approach and who tries it. The agent books the shifts, pulls the partner portal data and builds the report. Nobody types a spreadsheet at midnight.</p>
+        <div class="report">
+          <div class="hd"><span>Monthly report</span><span>Oct 2026</span></div>
+          <div class="bd">
+            <div><div class="v">14</div><div class="l">events</div></div>
+            <div><div class="v">489</div><div class="l">people approached</div></div>
+            <div><div class="v">61%</div><div class="l">stopped and tried it</div></div>
+          </div>
+          <div class="bar61" role="img" aria-label="61 percent conversion"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 platform -->
+<section id="platform">
+  <div class="wrap">
+    <div class="sh"><div class="no">05 / How it runs</div><h2>One stack. Same rules for every client.</h2><div class="aside">Boring on purpose. The interesting part should be your brand, not our outages.</div></div>
+    <div class="plat">
+      <div><div class="k">5.1 Infrastructure</div><h4>Google Cloud, top to bottom</h4><p>Cloud Run for the apps, Cloud SQL for the data. It scales on a busy Friday and costs little on a Tuesday.</p></div>
+      <div><div class="k">5.2 Sign-in</div><h4>No passwords for users</h4><p>Budtenders and customers sign in with a six-digit code by text or email. Nothing to forget, nothing to leak.</p></div>
+      <div><div class="k">5.3 Messaging</div><h4>Texts and email that land</h4><p>Reminders, codes, winner notices and reports go out from the app, on a sender the carriers trust.</p></div>
+      <div><div class="k">5.4 Agents</div><h4>AI that asks first</h4><p>Claude-powered agents confirm before they write anything, and every action goes in an audit log.</p></div>
+    </div>
+    <div class="fee">
+      <div class="q">One monthly fee. You get the admin. We keep the keys.</div>
+      <ul>
+        <li><span>01</span>Your staff run the admin console day to day</li>
+        <li><span>02</span>We run hosting, security, updates and the 2am fix</li>
+        <li><span>03</span>New features ship on the same platform, so they show up in weeks</li>
+      </ul>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- 06 contact -->
+<footer class="close" id="contact">
+  <div class="wrap">
+    <div class="g">
+      <h2>Tell me what your staff still does by hand.</h2>
+      <div class="side">
+        <p>Fifteen minutes on a call. I'll show you the apps live and tell you straight whether we'd build it.</p>
+        <a class="btn" href="mailto:david@canismajorpartners.com?subject=Cannacrypted%20demo">Request a demo <span aria-hidden="true">&rarr;</span></a>
+        <a class="mail" href="mailto:david@canismajorpartners.com">david@canismajorpartners.com</a>
+      </div>
+    </div>
+    <div class="foot">
+      <span class="fam"><img src="img/cmp-mark.svg" alt="" width="44" height="22">A Canis Major Partners company. New York.</span>
+      <span>&copy; 2026 Cannacrypted / <a href="https://canismajorpartners.com">canismajorpartners.com</a></span>
+    </div>
+  </div>
+</footer>
+
 <script>
-const BLOB = {"salt":"L755+9kOxpO1L1ZRv07I+Q==","iv":"QLGeai4WAM9Q3pka","ct":"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","iter":210000};
-
-const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
-
-async function open_(pw){
-  const enc = new TextEncoder();
-  const base = await crypto.subtle.importKey("raw", enc.encode(pw), "PBKDF2",
-                                             false, ["deriveKey"]);
-  const key = await crypto.subtle.deriveKey(
-    {name:"PBKDF2", salt:b64(BLOB.salt), iterations:BLOB.iter, hash:"SHA-256"},
-    base, {name:"AES-GCM", length:256}, false, ["decrypt"]);
-  const out = await crypto.subtle.decrypt({name:"AES-GCM", iv:b64(BLOB.iv)}, key,
-                                          b64(BLOB.ct));
-  return JSON.parse(new TextDecoder().decode(out));
-}
-
-function render(groups, email){
-  document.getElementById("who").textContent = email;
-  document.getElementById("body").innerHTML = groups.map(g => `
-    <div class="grp"><h3>${g.group}</h3><div class="rows">` +
-    g.items.map(([h, d]) => `
-      <a class="row" href="https://${h}.cannacrypted.com" target="_blank" rel="noopener">
-        <b>${h}</b><span>${d}</span><i>${h}.cannacrypted.com &rarr;</i></a>`).join("") +
-    `</div></div>`).join("");
-  document.getElementById("gate").style.display = "none";
-  document.getElementById("dir").classList.add("on");
-}
-
-document.getElementById("f").addEventListener("submit", async e => {
-  e.preventDefault();
-  const err = document.getElementById("err"), go = document.getElementById("go");
-  err.textContent = ""; go.disabled = true; go.textContent = "Opening\u2026";
-  try {
-    const groups = await open_(document.getElementById("p").value);
-    render(groups, document.getElementById("e").value);
-  } catch (_) {
-    // a wrong password fails the GCM tag - there is nothing partial to show
-    err.textContent = "That password does not open it.";
-    go.disabled = false; go.textContent = "Enter";
-    document.getElementById("p").select();
+/* The one load moment: the line under the headline resolves from hex into words. */
+(function(){
+  var el=document.getElementById('scr'); if(!el) return;
+  var target=el.textContent, hex='0123456789abcdef';
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var n=0, steps=26;
+  function frame(){
+    n++; var out='';
+    for(var i=0;i<target.length;i++){
+      var c=target[i];
+      if(c===' '||c===','||c==='.'||i<(n/steps)*target.length) out+=c;
+      else out+=hex[(Math.random()*16)|0];
+    }
+    el.textContent=out;
+    if(n<steps) setTimeout(frame,45); else el.textContent=target;
   }
-});
+  frame();
+})();
+/* Real SHA-256 of each registry row, computed here. */
+(function(){
+  if(!(window.crypto&&crypto.subtle&&window.TextEncoder)) return;
+  document.querySelectorAll('#reg tbody tr:not(.grp)').forEach(function(tr){
+    var cells=tr.querySelectorAll('td'), txt=[];
+    for(var i=0;i<cells.length-1;i++) txt.push(cells[i].textContent.trim());
+    crypto.subtle.digest('SHA-256',new TextEncoder().encode(txt.join('|'))).then(function(buf){
+      var h=Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+      var c=cells[cells.length-1]; c.textContent=h.slice(0,12); c.title=h;
+    });
+  });
+})();
 </script>
+</body>
 </html>
